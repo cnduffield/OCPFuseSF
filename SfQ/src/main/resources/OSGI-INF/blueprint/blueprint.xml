@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    JBoss, Home of Professional Open Source
+    Copyright 2014, Red Hat, Inc. and/or its affiliates, and individual
+    contributors by the @authors tag. See the copyright.txt in the
+    distribution for a full listing of individual contributors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!--
+   This is the OSGi Blueprint XML file defining the Camel context and routes.  Because the file is in the
+   OSGI-INF/blueprint directory inside our JAR, it will be automatically activated as soon as the bundle is installed.
+
+   The root element for any OSGi Blueprint file is 'blueprint' - you also see the namespace definitions for both the Blueprint
+   and the Camel namespaces.
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd                            http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+    <!--
+      The namespace for the camelContext element in Blueprint is 'https://camel.apache.org/schema/blueprint'. Additionally,
+      we can also define namespace prefixes we want to use them in the XPath expressions in our CBR.
+
+      While it is not required to assign id's to the <camelContext/> and <route/> elements, it is a good idea
+      to set those for runtime management purposes (logging, JMX MBeans, ...)
+    -->
+    <bean
+        class="org.apache.camel.component.salesforce.SalesforceComponent" id="salesforce">
+        <property name="loginConfig">
+            <bean class="org.apache.camel.component.salesforce.SalesforceLoginConfig">
+                <property name="loginUrl" value="https://login.salesforce.com"/>
+                <property name="clientId" value="3MVG9JZ_r.QzrS7j4iKzqKvdtNL3SL43X1UET1o9VA3y8NwnITNOPmz7HhBzB5hoGMxF1Cl7SqmYGd5lAkm6_"/>
+                <property name="clientSecret" value="3145372922197783927"/>
+                <property name="userName" value="integration-duff@redhat.com"/>
+                <property name="password" value="Ebru0001!ExEhUYDFCOpQLKKoCYxFv1Q9"/>
+            </bean>
+        </property>
+    </bean>
+    <camelContext id="_context1" xmlns="http://camel.apache.org/schema/blueprint">
+        <route id="_route1">
+            <!--<to id="_to1" uri="salesforce:query?sObjectQuery=Select Id, JBoss_Fuse_Integration_External_ID__c, Name, Phone From Account Where JBoss_Fuse_Integration_External_ID__c=12345&amp;sObjectClass=org.apache.camel.salesforce.dto.Account.class"/>-->
+            <!--  <to id="_to1" uri="salesforce:query?sObjectQuery=SELECT id,name from Opportunity&amp;sObjectClass=org.apache.camel.salesforce.dto.Opportunity.class"/> -->
+            <from id="_from1" uri="timer://foo?repeatCount=1"/>
+            <to id="_to1" uri="salesforce:query?sObjectQuery=SELECT Id,Name FROM Account Where JBoss_Fuse_Integration_External_ID__c=12345&amp;sObjectClass=org.apache.camel.salesforce.dto.QueryRecordsAccount"/>
+            <log id="_log1" message="Query result back from Salesforce:${body}"/>
+        </route>
+    </camelContext>
+</blueprint>
