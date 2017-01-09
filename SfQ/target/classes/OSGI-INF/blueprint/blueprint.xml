@@ -39,7 +39,7 @@
                 <property name="clientId" value="3MVG9JZ_r.QzrS7j4iKzqKvdtNL3SL43X1UET1o9VA3y8NwnITNOPmz7HhBzB5hoGMxF1Cl7SqmYGd5lAkm6_"/>
                 <property name="clientSecret" value="3145372922197783927"/>
                 <property name="userName" value="integration-duff@redhat.com"/>
-                <property name="password" value="Ebru0001!ExEhUYDFCOpQLKKoCYxFv1Q9"/>
+                <property name="password" value="ExEhUYDFCOpQLKKoCYxFv1Q9"/>
             </bean>
         </property>
     </bean>
